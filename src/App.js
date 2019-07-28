@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+
 import Map from './Map';
-import { timingSafeEqual } from 'crypto';
+import Stats from './Stats';
 
 class App extends Component {
   constructor(props) {
@@ -28,15 +29,17 @@ class App extends Component {
     });
   }
 
-  onScoreChange(add = true) {
+  onScoreChange(score) {
     this.setState(prev => {
       const markers = prev.markers.map((item, i) => {
-        if (prev.selected === i) {
-          item.score = add ? item.score + 1 : item.score - 1;
+        if (parseInt(prev.selected) === i) {
+          item.score = score;
         }
 
         return item;
       });
+
+      console.log('markers', markers);
 
       return { ...prev, markers };
     });
@@ -54,7 +57,7 @@ class App extends Component {
     this.setState(prev => ({
       ...prev,
       selected: null,
-      markers: prev.markers.filter((item, i) => i !== prev.selected)
+      markers: prev.markers.filter((item, i) => i !== parseInt(prev.selected))
     }));
   }
 
@@ -64,14 +67,12 @@ class App extends Component {
 
   render() {
     const { markers, selected } = this.state;
+    const { scores } = this.props;
 
     return (
-      <div>
-        {markers.map((item, i) => (
-          <div key={i}>
-            {i}: {item.score}
-          </div>
-        ))}
+      <div style={{ position: 'relative' }}>
+        <Stats scores={scores} markers={markers} />
+
         <Map
           markers={markers}
           selected={selected}
@@ -80,10 +81,22 @@ class App extends Component {
           togglePopup={this.togglePopup}
           onScoreChange={this.onScoreChange}
           onMarkerRemove={this.onMarkerRemove}
+          scores={scores}
         />
       </div>
     );
   }
 }
+
+App.defaultProps = {
+  scores: [
+    { label: 'Zero', value: 0 },
+    { label: 'One', value: 1 },
+    { label: 'Two', value: 2 },
+    { label: 'Three', value: 3 },
+    { label: 'Four', value: 4 },
+    { label: 'Five', value: 5 }
+  ]
+};
 
 export default App;

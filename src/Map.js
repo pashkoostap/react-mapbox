@@ -17,9 +17,11 @@ const MapWrapper = ({
   selected,
   togglePopup,
   onScoreChange,
-  onMarkerRemove
+  onMarkerRemove,
+  scores,
+  layerPaint
 }) => {
-  const selectedMarker = markers.find((item, i) => i === selected);
+  const selectedMarker = markers.find((item, i) => i === parseInt(selected));
 
   return (
     <Map
@@ -34,42 +36,19 @@ const MapWrapper = ({
       center={[24, 48]}
       zoom={[10]}
     >
-      <Layer
-        type='circle'
-        id='marker'
-        paint={{
-          'circle-color': 'red',
-          'circle-stroke-width': 2,
-          'circle-stroke-color': '#fff',
-          'circle-stroke-opacity': 1,
-          'circle-radius': {
-            'base': 15,
-            'stops': [[10, 16], [22, 40]]
-          },
-          'circle-color': [
-            'match',
-            ['get', 'score'],
-            'Low',
-            '#fbb03b',
-            'Black',
-            '#223b53',
-            'Hispanic',
-            '#e55e5e',
-            'Asian',
-            '#3bb2d0',
-            /* other */ '#ccc'
-          ]
-        }}
-      >
+      <Layer type='circle' id='marker' paint={layerPaint}>
         {markers.map((item, i) => (
           <Feature
             coordinates={item.coordinates}
-            properties={{ 'score': 'Low' }}
+            properties={{ 'score': `${item.score}` }}
             draggable={true}
-            onMouseEnter={e => togglePopup(i)}
+            onMouseEnter={() => togglePopup(`${i}`)}
             key={i}
             onDragEnd={e => {
               onMarkerMove(updateMarkerValues(item, e.lngLat), i);
+            }}
+            onDragStart={e => {
+              togglePopup(null);
             }}
           />
         ))}
@@ -77,31 +56,54 @@ const MapWrapper = ({
       {selectedMarker && (
         <Popup coordinates={selectedMarker.coordinates}>
           <div>
-            <div>
-              Score: {selectedMarker.score}
-              <button
-                onClick={() => {
-                  onScoreChange();
-                }}
-              >
-                +
-              </button>
-              <button
-                onClick={() => {
-                  onScoreChange(false);
-                }}
-              >
-                -
-              </button>
-            </div>
+            <select
+              onChange={e => onScoreChange(parseInt(e.target.value))}
+              defaultValue={0}
+            >
+              {scores.map(({ value, label }, i) => (
+                <option value={value} key={i}>
+                  {label}
+                </option>
+              ))}
+            </select>
 
-            <button onClick={onMarkerRemove}>Remove marker</button>
+            <button onClick={onMarkerRemove}>Remove</button>
           </div>
         </Popup>
       )}
       )}
     </Map>
   );
+};
+
+MapWrapper.defaultProps = {
+  layerPaint: {
+    'circle-color': 'red',
+    'circle-stroke-width': 2,
+    'circle-stroke-color': '#fff',
+    'circle-stroke-opacity': 1,
+    'circle-radius': {
+      'base': 15,
+      'stops': [[10, 16], [22, 40]]
+    },
+    'circle-color': [
+      'match',
+      ['get', 'score'],
+      '0',
+      'black',
+      '1',
+      'gray',
+      '2',
+      'red',
+      '3',
+      'orange',
+      '4',
+      'lime',
+      '5',
+      'green',
+      '#ccc'
+    ]
+  }
 };
 
 export default MapWrapper;

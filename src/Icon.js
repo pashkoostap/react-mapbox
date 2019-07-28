@@ -17,11 +17,24 @@ const getIconColorByScore = score => {
   }
 };
 
-const Icon = props => (
-  <Marker {...props}>
+const Icon = ({ marker, index, onMarkerMove }) => (
+  <Marker
+    latitude={marker.latitude}
+    longitude={marker.longitude}
+    draggable={true}
+    onDragEnd={e => {
+      const value = {
+        longitude: e.lngLat[0],
+        latitude: e.lngLat[1],
+        score: marker.score
+      };
+
+      onMarkerMove(value, index);
+    }}
+  >
     <div
       style={{
-        backgroundColor: getIconColorByScore(props.score),
+        backgroundColor: getIconColorByScore(marker.score),
         width: '50px',
         height: '50px',
         borderRadius: '50%',
@@ -31,7 +44,7 @@ const Icon = props => (
         cursor: 'pointer'
       }}
     >
-      {props.score}
+      {marker.score}
     </div>
   </Marker>
 );

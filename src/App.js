@@ -19,12 +19,24 @@ class App extends Component {
         }
       ]
     };
+
+    this.onMarkerMove = this.onMarkerMove.bind(this);
+  }
+
+  onMarkerMove(marker, index) {
+    this.setState(prev => {
+      const markers = prev.markers.map((item, i) => {
+        return i === index ? marker : item;
+      });
+
+      return { ...prev, markers };
+    });
   }
 
   render() {
     const { markers } = this.state;
 
-    return <Map markers={markers} />;
+    return <Map markers={markers} onMarkerMove={this.onMarkerMove} />;
   }
 }
 

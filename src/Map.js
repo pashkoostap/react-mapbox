@@ -3,7 +3,7 @@ import ReactMapGL from 'react-map-gl';
 
 import Icon from './Icon';
 
-const Map = ({ markers, styles }) => {
+const Map = ({ markers, onMarkerMove }) => {
   const [viewport, setViewport] = React.useState({
     width: 400,
     height: 400,
@@ -21,7 +21,7 @@ const Map = ({ markers, styles }) => {
       onViewStateChange={setViewport}
     >
       {markers.map((marker, i) => (
-        <Icon {...marker} key={i} />
+        <Icon marker={marker} key={i} index={i} onMarkerMove={onMarkerMove} />
       ))}
     </ReactMapGL>
   );

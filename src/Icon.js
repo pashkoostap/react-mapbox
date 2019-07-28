@@ -24,7 +24,11 @@ const Icon = props => (
         backgroundColor: getIconColorByScore(props.score),
         width: '50px',
         height: '50px',
-        borderRadius: '50%'
+        borderRadius: '50%',
+        color: 'white',
+        lineHeight: '50px',
+        textAlign: 'center',
+        cursor: 'pointer'
       }}
     >
       {props.score}

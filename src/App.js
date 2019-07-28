@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import FileSaver from 'file-saver';
 
 import Map from './Map';
 import Stats from './Stats';
@@ -17,6 +18,8 @@ class App extends Component {
     this.togglePopup = this.togglePopup.bind(this);
     this.onScoreChange = this.onScoreChange.bind(this);
     this.onMarkerRemove = this.onMarkerRemove.bind(this);
+    this.onExport = this.onExport.bind(this);
+    this.onImport = this.onImport.bind(this);
   }
 
   onMarkerMove(marker, index) {
@@ -38,8 +41,6 @@ class App extends Component {
 
         return item;
       });
-
-      console.log('markers', markers);
 
       return { ...prev, markers };
     });
@@ -65,13 +66,35 @@ class App extends Component {
     this.setState({ selected: marker });
   }
 
+  onExport() {
+    const blob = new Blob([JSON.stringify(this.state.markers, null, 4)], {
+      type: 'application/json'
+    });
+    FileSaver.saveAs(blob, 'markers.json');
+  }
+
+  onImport(e) {
+    const reader = new FileReader();
+
+    reader.onload = function() {
+      this.setState({ markers: JSON.parse(reader.result) });
+    }.bind(this);
+
+    reader.readAsText(e.target.files[0]);
+  }
+
   render() {
     const { markers, selected } = this.state;
     const { scores } = this.props;
 
     return (
       <div style={{ position: 'relative' }}>
-        <Stats scores={scores} markers={markers} />
+        <Stats
+          scores={scores}
+          markers={markers}
+          onExport={this.onExport}
+          onImport={this.onImport}
+        />
 
         <Map
           markers={markers}

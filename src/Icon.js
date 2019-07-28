@@ -17,36 +17,20 @@ const getIconColorByScore = score => {
   }
 };
 
+const updateMarkerValues = (marker, lngLat) => ({
+  coordinates: [lngLat.lng, lngLat.lat],
+  score: marker.score
+});
+
 const Icon = ({ marker, index, onMarkerMove }) => (
-  <Marker
-    latitude={marker.latitude}
-    longitude={marker.longitude}
+  <Feature
+    coordinates={item.coordinates}
+    properties={{ 'score': 'Low' }}
     draggable={true}
     onDragEnd={e => {
-      const value = {
-        longitude: e.lngLat[0],
-        latitude: e.lngLat[1],
-        score: marker.score
-      };
-
-      onMarkerMove(value, index);
+      onMarkerMove(updateMarkerValues(marker, e.lngLat), index);
     }}
-  >
-    <div
-      style={{
-        backgroundColor: getIconColorByScore(marker.score),
-        width: '50px',
-        height: '50px',
-        borderRadius: '50%',
-        color: 'white',
-        lineHeight: '50px',
-        textAlign: 'center',
-        cursor: 'pointer'
-      }}
-    >
-      {marker.score}
-    </div>
-  </Marker>
+  />
 );
 
 Icon.defaultProps = {};

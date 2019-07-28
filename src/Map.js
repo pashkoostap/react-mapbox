@@ -1,30 +1,63 @@
 import React from 'react';
-import ReactMapGL from 'react-map-gl';
+import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
 
-import Icon from './Icon';
+const Map = ReactMapboxGl({
+  accessToken: process.env.TOKEN
+});
 
-const Map = ({ markers, onMarkerMove }) => {
-  const [viewport, setViewport] = React.useState({
-    width: 400,
-    height: 400,
-    latitude: 48,
-    longitude: 24,
-    zoom: 10
-  });
+const updateMarkerValues = (marker, lngLat) => ({
+  coordinates: [lngLat.lng, lngLat.lat],
+  score: marker.score
+});
 
-  return (
-    <ReactMapGL
-      {...viewport}
-      width={'100%'}
-      height={'100vh'}
-      mapboxApiAccessToken={process.env.TOKEN}
-      onViewStateChange={setViewport}
+const MapWrapper = ({ markers, onMarkerAdd, onMarkerMove }) => (
+  <Map
+    style='mapbox://styles/mapbox/streets-v9'
+    onClick={(map, e) => onMarkerAdd([e.lngLat.lng, e.lngLat.lat])}
+    containerStyle={{
+      height: '100vh',
+      width: '100vw'
+    }}
+    center={[24, 48]}
+    zoom={[10]}
+  >
+    <Layer
+      type='circle'
+      id='marker'
+      paint={{
+        'circle-color': 'red',
+        'circle-stroke-width': 2,
+        'circle-stroke-color': '#fff',
+        'circle-stroke-opacity': 1,
+        'circle-color': [
+          'match',
+          ['get', 'score'],
+          'Low',
+          '#fbb03b',
+          'Black',
+          '#223b53',
+          'Hispanic',
+          '#e55e5e',
+          'Asian',
+          '#3bb2d0',
+          /* other */ '#ccc'
+        ]
+      }}
     >
-      {markers.map((marker, i) => (
-        <Icon marker={marker} key={i} index={i} onMarkerMove={onMarkerMove} />
+      {markers.map((item, i) => (
+        <Feature
+          coordinates={item.coordinates}
+          properties={{ 'score': 'Low' }}
+          draggable={true}
+          key={i}
+          onDragEnd={e => {
+            onMarkerMove(updateMarkerValues(item, e.lngLat), i);
+          }}
+        />
       ))}
-    </ReactMapGL>
-  );
-};
+    </Layer>
+    )}
+  </Map>
+);
 
-export default Map;
+export default MapWrapper;

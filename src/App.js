@@ -8,19 +8,18 @@ class App extends Component {
     this.state = {
       markers: [
         {
-          latitude: 48,
-          longitude: 24,
+          coordinates: [24, 48],
           score: 0
         },
         {
-          latitude: 48.05,
-          longitude: 24.05,
-          score: 50
+          coordinates: [24.05, 48.05],
+          score: 55
         }
       ]
     };
 
     this.onMarkerMove = this.onMarkerMove.bind(this);
+    this.onMarkerAdd = this.onMarkerAdd.bind(this);
   }
 
   onMarkerMove(marker, index) {
@@ -33,10 +32,23 @@ class App extends Component {
     });
   }
 
+  onMarkerAdd(coordinates) {
+    this.setState(prev => ({
+      ...prev,
+      markers: [...prev.markers, { coordinates, score: 0 }]
+    }));
+  }
+
   render() {
     const { markers } = this.state;
 
-    return <Map markers={markers} onMarkerMove={this.onMarkerMove} />;
+    return (
+      <Map
+        markers={markers}
+        onMarkerMove={this.onMarkerMove}
+        onMarkerAdd={this.onMarkerAdd}
+      />
+    );
   }
 }
 

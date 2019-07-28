@@ -1,21 +1,21 @@
 import React from 'react';
-import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
-const MapGL = ReactMapboxGl({
-  accessToken: process.env.TOKEN
-});
+import ReactMapGL from 'react-map-gl';
 
-const Map = () => (
-  <MapGL
-    style='mapbox://styles/mapbox/streets-v9'
-    containerStyle={{
-      height: '100vh',
-      width: '100vw'
-    }}
+import Icon from './Icon';
+
+const Map = ({ markers, styles }) => (
+  <ReactMapGL
+    width={'100%'}
+    height={'100vh'}
+    mapboxApiAccessToken={process.env.TOKEN}
+    latitude={48}
+    longitude={24}
+    zoom={10}
   >
-    <Layer type='symbol' id='marker' layout={{ 'icon-image': 'marker-15' }}>
-      <Feature coordinates={[-0.481747846041145, 51.3233379650232]} />
-    </Layer>
-  </MapGL>
+    {markers.map((marker, i) => (
+      <Icon {...marker} key={i} />
+    ))}
+  </ReactMapGL>
 );
 
 export default Map;

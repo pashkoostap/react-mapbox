@@ -2,7 +2,8 @@ import React from 'react';
 import ReactMapboxGl, { Layer, Feature, Popup } from 'react-mapbox-gl';
 
 const Map = ReactMapboxGl({
-  accessToken: process.env.TOKEN
+  accessToken:
+    'pk.eyJ1IjoiZ2luZW5lbmUiLCJhIjoiY2p5bml0dXlxMHVoaTNmbXd5eDJjNmh1bCJ9.oIYTCKtSLLYPnjVRjzlF1w'
 });
 
 const updateMarkerValues = (marker, lngLat) => ({

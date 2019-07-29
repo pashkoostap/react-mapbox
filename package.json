@@ -36,7 +36,6 @@
     "webpack-dev-server": "^3.7.2"
   },
   "dependencies": {
-    "dotenv-webpack": "^1.7.0",
     "file-saver": "^2.0.2",
     "mapbox-gl": "^1.1.1",
     "react": "^16.8.6",

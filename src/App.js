@@ -28,7 +28,7 @@ class App extends Component {
         return i === index ? marker : item;
       });
 
-      return { ...prev, markers };
+      return { ...prev, selected: null, markers };
     });
   }
 

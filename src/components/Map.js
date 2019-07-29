@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactMapboxGl, { Layer, Feature, Popup } from 'react-mapbox-gl';
 
+import MarkerInfo from './MarkerInfo';
+
 const Map = ReactMapboxGl({
   accessToken:
     'pk.eyJ1IjoiZ2luZW5lbmUiLCJhIjoiY2p5bml0dXlxMHVoaTNmbXd5eDJjNmh1bCJ9.oIYTCKtSLLYPnjVRjzlF1w'
@@ -43,7 +45,7 @@ const MapWrapper = ({
             coordinates={item.coordinates}
             properties={{ 'score': `${item.score}` }}
             draggable={true}
-            onMouseEnter={() => togglePopup(`${i}`)}
+            onMouseEnter={() => togglePopup(i)}
             key={i}
             onDragEnd={e => {
               onMarkerMove(updateMarkerValues(item, e.lngLat), i);
@@ -54,24 +56,12 @@ const MapWrapper = ({
           />
         ))}
       </Layer>
-      {selectedMarker && (
-        <Popup coordinates={selectedMarker.coordinates}>
-          <div>
-            <select
-              onChange={e => onScoreChange(parseInt(e.target.value))}
-              defaultValue={0}
-            >
-              {scores.map(({ value, label }, i) => (
-                <option value={value} key={i}>
-                  {label}
-                </option>
-              ))}
-            </select>
-
-            <button onClick={onMarkerRemove}>Remove</button>
-          </div>
-        </Popup>
-      )}
+      <MarkerInfo
+        marker={selectedMarker}
+        scores={scores}
+        onScoreChange={onScoreChange}
+        onMarkerRemove={onMarkerRemove}
+      />
       )}
     </Map>
   );

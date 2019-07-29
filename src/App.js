@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import FileSaver from 'file-saver';
 
-import Map from './Map';
-import Stats from './Stats';
+import Map from './components/Map';
+import Stats from './components/Stats';
 
 class App extends Component {
   constructor(props) {

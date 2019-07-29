@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactMapboxGl, { Layer, Feature, Popup } from 'react-mapbox-gl';
+import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
 
 import MarkerInfo from './MarkerInfo';
 
@@ -22,22 +22,19 @@ const MapWrapper = ({
   onScoreChange,
   onMarkerRemove,
   scores,
-  layerPaint
+  layerPaint,
+  mapConfig
 }) => {
   const selectedMarker = markers.find((item, i) => i === parseInt(selected));
 
   return (
     <Map
-      style='mapbox://styles/mapbox/streets-v9'
+      {...mapConfig}
       onClick={(map, e) => {
-        onMarkerAdd([e.lngLat.lng, e.lngLat.lat]);
+        const { lng, lat } = e.lngLat;
+
+        onMarkerAdd([lng, lat]);
       }}
-      containerStyle={{
-        height: '100vh',
-        width: '100vw'
-      }}
-      center={[24, 48]}
-      zoom={[10]}
     >
       <Layer type='circle' id='marker' paint={layerPaint}>
         {markers.map((item, i) => (
@@ -45,7 +42,10 @@ const MapWrapper = ({
             coordinates={item.coordinates}
             properties={{ 'score': `${item.score}` }}
             draggable={true}
-            onMouseEnter={() => togglePopup(i)}
+            onMouseEnter={() => {
+              togglePopup(null);
+              togglePopup(i);
+            }}
             key={i}
             onDragEnd={e => {
               onMarkerMove(updateMarkerValues(item, e.lngLat), i);
@@ -68,6 +68,15 @@ const MapWrapper = ({
 };
 
 MapWrapper.defaultProps = {
+  mapConfig: {
+    style: 'mapbox://styles/mapbox/streets-v9',
+    center: [24, 48],
+    zoom: [10],
+    containerStyle: {
+      height: '100vh',
+      width: '100vw'
+    }
+  },
   layerPaint: {
     'circle-color': 'red',
     'circle-stroke-width': 2,

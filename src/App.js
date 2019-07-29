@@ -113,12 +113,12 @@ class App extends Component {
 
 App.defaultProps = {
   scores: [
-    { label: 'Zero', value: 0 },
-    { label: 'One', value: 1 },
-    { label: 'Two', value: 2 },
-    { label: 'Three', value: 3 },
+    { label: 'Five', value: 5 },
     { label: 'Four', value: 4 },
-    { label: 'Five', value: 5 }
+    { label: 'Three', value: 3 },
+    { label: 'Two', value: 2 },
+    { label: 'One', value: 1 },
+    { label: 'Zero', value: 0 }
   ]
 };
 

@@ -10,7 +10,7 @@ const MarkerInfo = ({ marker, scores, onScoreChange, onMarkerRemove }) => {
       <div>
         <select
           onChange={e => onScoreChange(parseInt(e.target.value))}
-          defaultValue={0}
+          defaultValue={marker.score}
         >
           {scores.map(({ value, label }, i) => (
             <option value={value} key={i}>

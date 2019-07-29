@@ -1,9 +1,9 @@
 # react-mapbox
 
-Demo: (https://react-mapbox.netlify.com/)[https://react-mapbox.netlify.com/]
+Demo: [https://react-mapbox.netlify.com/](https://react-mapbox.netlify.com/)
 
 Clone repository: `git clone https://github.com/pashkoostap/react-mapbox.git`
 
-Run `npm run dev` command at the terminal to start development server
+Start development server: `npm run dev`
 
-Run `npm run build` to build the project
+Build project: `npm run build`
